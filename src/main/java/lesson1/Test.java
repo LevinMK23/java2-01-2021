@@ -1,4 +1,6 @@
-import pack.A;
+package lesson1;
+
+import lesson1.pack.A;
 
 public class Test {
     public static void main(String[] args) {
@@ -15,7 +17,7 @@ public class Test {
         Object oA = new A(12);
         Object oB = new B(12);
         A a5 = new B(123);
-        // B b2 = new A(123);
+        // lesson1.B b2 = new A(123);
         Object oC = new Cat();
         if (oA instanceof Cat) {
             Cat cat = (Cat) oA;

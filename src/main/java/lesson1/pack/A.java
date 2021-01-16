@@ -1,4 +1,4 @@
-package pack;
+package lesson1.pack;
 
 public class A {
 

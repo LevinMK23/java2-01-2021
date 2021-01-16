@@ -1,6 +1,5 @@
-package logging;
+package lesson1.logging;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Test {

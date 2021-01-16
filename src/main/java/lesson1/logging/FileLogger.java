@@ -1,4 +1,4 @@
-package logging;
+package lesson1.logging;
 
 import java.io.Closeable;
 import java.io.FileNotFoundException;
