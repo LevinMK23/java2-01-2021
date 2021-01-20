@@ -42,18 +42,18 @@ public class Test {
         // IOException
         // OOM OutOfMemory
         // SOF StackOverFlow
-        TwoArgsSummer summer = new TwoArgsSummer();
-        System.out.println(summer.processString("111111111 2"));
-
-        try {
-            MyReader reader = new MyReader();
-            System.out.println(reader.readInt());
-            reader.close();
-            MyWriter writer = new MyWriter();
-            writer.writeInt(66);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        TwoArgsSummer summer = new TwoArgsSummer();
+//        System.out.println(summer.processString("111111111 2"));
+//
+//        try {
+//            MyReader reader = new MyReader();
+//            System.out.println(reader.readInt());
+//            reader.close();
+//            MyWriter writer = new MyWriter();
+//            writer.writeInt(66);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
