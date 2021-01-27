@@ -51,7 +51,7 @@ public class IntLinkedList implements Iterable<Integer> {
 
         iteratorNode = head;
 
-        return new Iterator<>() {
+        return new Iterator<Integer>() {
             @Override
             public boolean hasNext() {
                 return iteratorNode != null;

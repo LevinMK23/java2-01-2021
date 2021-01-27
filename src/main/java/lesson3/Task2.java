@@ -12,5 +12,6 @@ public class Task2 {
             map.put(word, map.getOrDefault(word, 0) + 1);
         }
         System.out.println(map);
+        PhoneBook book = PhoneBook.getInstance();
     }
 }

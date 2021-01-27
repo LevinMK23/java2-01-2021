@@ -56,7 +56,7 @@ public class IntArrayList implements Iterable<Integer> {
 
         iteratorPosition = 0;
 
-        return new Iterator<>() {
+        return new Iterator<Integer>() {
 
             @Override
             public boolean hasNext() {
