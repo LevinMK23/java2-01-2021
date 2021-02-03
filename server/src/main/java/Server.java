@@ -54,5 +54,6 @@ public class Server {
             port = DEFAULT_PORT;
         }
         new Server(port);
+
     }
 }
