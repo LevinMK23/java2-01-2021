@@ -23,8 +23,6 @@ public class EchoServer {
                         System.out.println("Client connection was broken");
                     }
                 }).start();
-
-                //
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,10 +34,8 @@ public class EchoServer {
     }
 
     private void handle(Socket socket) throws IOException {
-        DataInputStream is;
-        DataOutputStream os;
-        is = new DataInputStream(socket.getInputStream());
-        os = new DataOutputStream(socket.getOutputStream());
+        DataInputStream is = new DataInputStream(socket.getInputStream());
+        DataOutputStream os = new DataOutputStream(socket.getOutputStream());
         while (true) {
             String msg = is.readUTF();
             System.out.println("From client: " + msg);
