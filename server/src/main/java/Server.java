@@ -1,7 +1,9 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.stream.Collectors;
 
 public class Server {
 
@@ -25,6 +27,24 @@ public class Server {
         }
     }
 
+    public static void main(String[] args) {
+        int port = -1;
+        if (args != null && args.length == 1) {
+            port = Integer.parseInt(args[0]);
+        }
+        if (port == -1) {
+            port = DEFAULT_PORT;
+        }
+        new Server(port);
+
+    }
+
+    public List<String> getUserNickNames() {
+        return clients.stream()
+                .map(ClientHandler::getNickName)
+                .collect(Collectors.toList());
+    }
+
     public void addClient(ClientHandler clientHandler) {
         clients.add(clientHandler);
         System.out.println("[DEBUG] client added to broadcast queue");
@@ -35,25 +55,18 @@ public class Server {
         System.out.println("[DEBUG] client removed from broadcast queue");
     }
 
-    public void broadCastMessage(String msg) throws IOException {
+    public void broadCastMessage(AbstractMessage msg) throws IOException {
         for (ClientHandler client : clients) {
             client.sendMessage(msg);
         }
     }
-    
-    public void sendMessageTo(String nickName, String message) {
-        // TODO: 03.02.2021  
-    }
 
-    public static void main(String[] args) {
-        int port = -1;
-        if (args !=  null && args.length == 1) {
-            port = Integer.parseInt(args[0]);
+    public void sendMessageTo(TextMessage message) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client.getNickName().equals(message.getTo()) ||
+                    client.getNickName().equals(message.getFrom())) {
+                client.sendMessage(message);
+            }
         }
-        if (port == -1) {
-            port = DEFAULT_PORT;
-        }
-        new Server(port);
-
     }
 }

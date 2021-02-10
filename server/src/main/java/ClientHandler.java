@@ -1,14 +1,16 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
 
     private Socket socket;
     private Server server;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private boolean running;
     private String nickName;
     private static int cnt = 0;
@@ -21,18 +23,36 @@ public class ClientHandler implements Runnable {
         nickName = "user" + cnt;
     }
 
+
+    public String getNickName() {
+        return nickName;
+    }
+
     @Override
     public void run() {
         try {
-            out = new DataOutputStream(socket.getOutputStream());
-            in = new DataInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             System.out.println("[DEBUG] client start processing");
+            server.broadCastMessage(UserListMessage.of(server.getUserNickNames()));
             while (running) {
-                String msg = in.readUTF();
-                if (msg.equals("/quit")) {
-                    out.writeUTF(msg);
-                } else {
-                    server.broadCastMessage(nickName + ": " + msg);
+                AbstractMessage msg = (AbstractMessage) in.readObject();
+                if (msg instanceof TextMessage) {
+                    TextMessage message = (TextMessage) msg;
+                    if (message.getTo() != null) {
+                        server.sendMessageTo(message);
+                    } else {
+                        server.broadCastMessage(message);
+                    }
+                }
+                if (msg instanceof NickRequest) {
+                    out.writeObject(new NickResponse(nickName));
+                    out.flush();
+                }
+
+                if (msg instanceof QuitRequest) {
+                    out.writeObject(msg);
+                    out.flush();
                 }
                 System.out.println("[DEBUG] message from client: " + msg);
 
@@ -40,11 +60,15 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             System.err.println("Handled connection was broken");
             server.removeClient(this);
+            try {
+                server.broadCastMessage(UserListMessage.of(server.getUserNickNames()));
+            } catch (IOException ignored) {
+            }
         }
     }
 
-    public void sendMessage(String message) throws IOException {
-        out.writeUTF(message);
+    public void sendMessage(AbstractMessage message) throws IOException {
+        out.writeObject(message);
         out.flush();
     }
 }
